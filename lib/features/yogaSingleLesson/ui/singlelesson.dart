@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keepyoga/features/yogaSingleLesson/bloc/single_lesson_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 
 class SingleLesson extends StatefulWidget {
   final String lessonID;
@@ -12,60 +13,229 @@ class SingleLesson extends StatefulWidget {
 
 class _SingleLessonState extends State<SingleLesson> {
   final SingleLessonBloc singleLessonBloc = SingleLessonBloc();
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
     singleLessonBloc
         .add(SingleLessonInitialFetchEvent(yogaLessonId: widget.lessonID));
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(
+        "",
+      ),
+    );
+
+    _initializeVideoPlayerFuture = _controller.initialize();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(title: Text("S less")),
-        body: BlocConsumer<SingleLessonBloc, SingleLessonState>(
-          bloc: singleLessonBloc,
-          listener: (BuildContext context, SingleLessonState state) {},
-          builder: (BuildContext context, SingleLessonState state) {
-            switch (state.runtimeType) {
-              case SingleLessonYogaLoadingState:
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              case SingleLessonYogaLoadedSuccessState:
-                final successState =
-                    state as SingleLessonYogaLoadedSuccessState;
-                return Container(
-                  child: ListView.builder(
-                    itemCount: successState.YogaLesson.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: Colors.grey.shade200,
-                        padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocConsumer<SingleLessonBloc, SingleLessonState>(
+        bloc: singleLessonBloc,
+        listener: (BuildContext context, SingleLessonState state) {},
+        builder: (BuildContext context, SingleLessonState state) {
+          switch (state.runtimeType) {
+            case SingleLessonYogaLoadingState:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case SingleLessonYogaLoadedSuccessState:
+              final successState = state as SingleLessonYogaLoadedSuccessState;
+              _controller = VideoPlayerController.networkUrl(
+                Uri.parse(
+                  successState.YogaLesson[0].videoUrl,
+                ),
+              );
+              _initializeVideoPlayerFuture = _controller.initialize();
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: screenSize.height / 1.3,
+                          child: FutureBuilder(
+                            future: _initializeVideoPlayerFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return AspectRatio(
+                                  aspectRatio: _controller.value.aspectRatio,
+                                  child: VideoPlayer(_controller),
+                                );
+                              } else {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          left: 18,
+                          top: 48,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                size: 24,
+                              )),
+                        ),
+                        Positioned(
+                          left: 303,
+                          top: 60,
+                          child: Container(
+                            decoration: ShapeDecoration(
+                                shape: CircleBorder(), color: Colors.white),
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                size: 32,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: -1,
+                          child: Container(
+                            width: screenSize.width,
+                            height: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Text(
+                                    successState.YogaLesson[0].title,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Text(
+                                    successState.YogaLesson[0].description,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(successState.YogaLesson[0].id.toString()),
-                            Text(successState.YogaLesson[0].title),
-                            Text(successState.YogaLesson[0].videoUrl),
                             ElevatedButton(
-                                onPressed: () {
-                                  debugPrint(
-                                      successState.YogaLesson[0].toString());
-                                },
-                                child: Text("Click Me"))
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                padding: EdgeInsets.all(16),
+                              ),
+                              child: Icon(
+                                Icons.skip_previous,
+                                size: 24,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (_controller.value.isPlaying) {
+                                  _controller.pause();
+                                } else {
+                                  // If the video is paused, play it.
+                                  _controller.play();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                padding: EdgeInsets.all(24),
+                              ),
+                              child: Icon(
+                                _controller.value.isPlaying
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                                size: 32,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                padding: EdgeInsets.all(16),
+                              ),
+                              child: Icon(
+                                Icons.skip_next,
+                                size: 24,
+                              ),
+                            ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                );
-              default:
-                return const SizedBox();
-            }
-          },
-        ));
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            // return Container(
+            //   child: ListView.builder(
+            //     itemCount: successState.YogaLesson.length,
+            //     itemBuilder: (context, index) {
+            //       return Container(
+            //         color: Colors.grey.shade200,
+            //         padding: const EdgeInsets.all(16),
+            //         margin: const EdgeInsets.all(16),
+            //         child: Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Text(successState.YogaLesson[0].id.toString()),
+            //             Text(successState.YogaLesson[0].title),
+            //             Text(successState.YogaLesson[0].videoUrl),
+            //             ElevatedButton(
+            //                 onPressed: () {
+            //                   debugPrint(
+            //                       successState.YogaLesson[0].toString());
+            //                 },
+            //                 child: Text("Click Me"))
+            //           ],
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // );
+            default:
+              return SizedBox();
+          }
+        },
+      ),
+    );
   }
 }
