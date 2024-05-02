@@ -12,6 +12,7 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   LessonBloc() : super(LessonInitial()) {
     on<LessonInitialFetchEvent>(lessonInitialFetchEvent);
     on<LessonYogaButtonClickedEvent>(lessonYogaButtonClickedEvent);
+    on<LessonYogaBackButtonClickedEvent>(lessonYogaBackButtonClickedEvent);
   }
 
   Future<FutureOr<void>> lessonInitialFetchEvent(
@@ -28,5 +29,10 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   FutureOr<void> lessonYogaButtonClickedEvent(
       LessonYogaButtonClickedEvent event, Emitter<LessonState> emit) {
     emit(LessonYogaSelecttedLesson(YogaLessonId: event.clickedYogaLessonId));
+  }
+
+  FutureOr<void> lessonYogaBackButtonClickedEvent(
+      LessonYogaBackButtonClickedEvent event, Emitter<LessonState> emit) {
+    emit(LessonYogaGoBackActionState());
   }
 }

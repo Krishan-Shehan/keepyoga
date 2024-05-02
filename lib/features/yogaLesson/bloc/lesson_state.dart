@@ -20,3 +20,5 @@ class LessonYogaSelecttedLesson extends LessonActionState {
   final String YogaLessonId;
   LessonYogaSelecttedLesson({required this.YogaLessonId});
 }
+
+class LessonYogaGoBackActionState extends LessonActionState {}

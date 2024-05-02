@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keepyoga/features/home/ui/home.dart';
 import 'package:keepyoga/features/yogaLesson/bloc/lesson_bloc.dart';
 import 'package:keepyoga/features/yogaSingleLesson/ui/singlelesson.dart';
 
@@ -38,6 +39,10 @@ class _YogaLessonsState extends State<YogaLessons> {
                     builder: (context) =>
                         SingleLesson(lessonID: successState.YogaLessonId)));
           }
+          if (state is LessonYogaGoBackActionState) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          }
         },
         builder: (BuildContext context, LessonState state) {
           switch (state.runtimeType) {
@@ -66,7 +71,8 @@ class _YogaLessonsState extends State<YogaLessons> {
                         top: 48,
                         child: IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              lessonBloc
+                                  .add(LessonYogaBackButtonClickedEvent());
                             },
                             icon: const Icon(
                               Icons.arrow_back_ios,
@@ -81,7 +87,8 @@ class _YogaLessonsState extends State<YogaLessons> {
                               shape: CircleBorder(), color: Colors.white),
                           child: IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              lessonBloc
+                                  .add(LessonYogaBackButtonClickedEvent());
                             },
                             icon: const Icon(
                               Icons.close,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keepyoga/features/yogaLesson/ui/allLessons.dart';
 import 'package:keepyoga/features/yogaSingleLesson/bloc/single_lesson_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -36,7 +37,17 @@ class _SingleLessonState extends State<SingleLesson> {
     return Scaffold(
       body: BlocConsumer<SingleLessonBloc, SingleLessonState>(
         bloc: singleLessonBloc,
-        listener: (BuildContext context, SingleLessonState state) {},
+        listenWhen: (previous, current) => current is SingleLessonActionState,
+        listener: (BuildContext context, SingleLessonState state) {
+          if (state is SingleLessonYogaSelectedSession) {
+            final successState = state as SingleLessonYogaSelectedSession;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => YogaLessons(
+                        yogaSessionId: successState.YogaSessionId)));
+          }
+        },
         builder: (BuildContext context, SingleLessonState state) {
           switch (state.runtimeType) {
             case SingleLessonYogaLoadingState:
@@ -82,7 +93,10 @@ class _SingleLessonState extends State<SingleLesson> {
                           top: 48,
                           child: IconButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                singleLessonBloc.add(
+                                    SingleLessonYogaBackButtonClickedEvent(
+                                        clickedYogaSessionId: successState
+                                            .YogaLesson[0].sessionId));
                               },
                               icon: const Icon(
                                 Icons.arrow_back_ios,
@@ -97,7 +111,10 @@ class _SingleLessonState extends State<SingleLesson> {
                                 shape: CircleBorder(), color: Colors.white),
                             child: IconButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                singleLessonBloc.add(
+                                    SingleLessonYogaBackButtonClickedEvent(
+                                        clickedYogaSessionId: successState
+                                            .YogaLesson[0].sessionId));
                               },
                               icon: const Icon(
                                 Icons.close,
@@ -205,32 +222,6 @@ class _SingleLessonState extends State<SingleLesson> {
                   ],
                 ),
               );
-            // return Container(
-            //   child: ListView.builder(
-            //     itemCount: successState.YogaLesson.length,
-            //     itemBuilder: (context, index) {
-            //       return Container(
-            //         color: Colors.grey.shade200,
-            //         padding: const EdgeInsets.all(16),
-            //         margin: const EdgeInsets.all(16),
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             Text(successState.YogaLesson[0].id.toString()),
-            //             Text(successState.YogaLesson[0].title),
-            //             Text(successState.YogaLesson[0].videoUrl),
-            //             ElevatedButton(
-            //                 onPressed: () {
-            //                   debugPrint(
-            //                       successState.YogaLesson[0].toString());
-            //                 },
-            //                 child: Text("Click Me"))
-            //           ],
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // );
             default:
               return SizedBox();
           }

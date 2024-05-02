@@ -16,3 +16,5 @@ class LessonYogaButtonClickedEvent extends LessonEvent {
     required this.clickedYogaLessonId,
   });
 }
+
+class LessonYogaBackButtonClickedEvent extends LessonEvent {}

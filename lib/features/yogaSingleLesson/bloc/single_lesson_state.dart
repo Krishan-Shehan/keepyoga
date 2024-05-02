@@ -15,3 +15,8 @@ class SingleLessonYogaLoadedSuccessState extends SingleLessonState {
     required this.YogaLesson,
   });
 }
+
+class SingleLessonYogaSelectedSession extends SingleLessonActionState {
+  final String YogaSessionId;
+  SingleLessonYogaSelectedSession({required this.YogaSessionId});
+}

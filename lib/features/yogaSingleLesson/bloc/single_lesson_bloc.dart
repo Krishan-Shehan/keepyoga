@@ -11,6 +11,8 @@ part 'single_lesson_state.dart';
 class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
   SingleLessonBloc() : super(SingleLessonInitial()) {
     on<SingleLessonInitialFetchEvent>(singleLessonInitialFetchEvent);
+    on<SingleLessonYogaBackButtonClickedEvent>(
+        singleLessonYogaBackButtonClickedEvent);
   }
 
   FutureOr<void> singleLessonInitialFetchEvent(
@@ -22,5 +24,12 @@ class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
         await YogaRepo.fetchYogaSingleLessonData(event.yogaLessonId, "token");
     print(yogaLesson);
     emit(SingleLessonYogaLoadedSuccessState(YogaLesson: yogaLesson));
+  }
+
+  FutureOr<void> singleLessonYogaBackButtonClickedEvent(
+      SingleLessonYogaBackButtonClickedEvent event,
+      Emitter<SingleLessonState> emit) {
+    emit(SingleLessonYogaSelectedSession(
+        YogaSessionId: event.clickedYogaSessionId));
   }
 }

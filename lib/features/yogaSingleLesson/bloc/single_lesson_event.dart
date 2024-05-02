@@ -9,3 +9,10 @@ class SingleLessonInitialFetchEvent extends SingleLessonEvent {
     required this.yogaLessonId,
   });
 }
+
+class SingleLessonYogaBackButtonClickedEvent extends SingleLessonEvent {
+  final String clickedYogaSessionId;
+  SingleLessonYogaBackButtonClickedEvent({
+    required this.clickedYogaSessionId,
+  });
+}
