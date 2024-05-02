@@ -24,13 +24,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> loginButtonPressedEvent(
       LoginButtonPressedEvent event, Emitter<AuthState> emit) async {
     emit(LoginLoadingState());
-    bool success = await AuthRepo.LogIn("email", "password");
+    bool success = await AuthRepo.LogIn(event.email, event.password);
     if (success) {
-      print("success in block");
+      print("success Login");
       emit(LoginSuccessState());
     } else {
-      print("gg in block");
-      // emit(PostsAdditionErrorState());
+      print("LoginErrorState");
+      emit(LoginErrorState());
     }
   }
 }
