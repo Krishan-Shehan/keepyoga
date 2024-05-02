@@ -11,7 +11,7 @@ class AuthRepo {
     try {
       var response = await client.post(
           Uri.parse('http://84.46.249.96:5000/api/v1/auth/login'),
-          body: {"email": "test@email.com", "password": "123456"});
+          body: {"email": email, "password": password});
 
       debugPrint(response.body);
 

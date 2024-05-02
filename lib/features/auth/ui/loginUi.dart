@@ -97,18 +97,17 @@ class _LoginUiState extends State<LoginUi> {
                           height: 40,
                         ),
                         RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.black),
+                          text: const TextSpan(
+                            style: TextStyle(fontSize: 12, color: Colors.black),
                             children: [
-                              const TextSpan(
+                              TextSpan(
                                 text: "By continuing, you agree to our ",
                               ),
                               TextSpan(
                                 text: "Terms of Service ",
                                 style: TextStyle(color: Color(0xFF6B4EFF)),
                               ),
-                              const TextSpan(
+                              TextSpan(
                                 text: "and ",
                               ),
                               TextSpan(
