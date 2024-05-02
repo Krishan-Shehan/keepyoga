@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keepyoga/features/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keepyoga/features/yogaLesson/ui/allLessons.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -30,8 +31,12 @@ class _HomeState extends State<Home> {
           buildWhen: (previous, current) => current is! HomeActionState,
           listener: (BuildContext context, HomeState state) {
             if (state is HomeYogaSessionSelecttedState) {
+              final successState = state as HomeYogaSessionSelecttedState;
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => YogaLessons(
+                          yogaSessionId: successState.YogaSessionId)));
             }
           },
           builder: (BuildContext context, HomeState state) {
@@ -63,8 +68,8 @@ class _HomeState extends State<Home> {
                                       .toString());
                                   homeBloc.add(
                                       HomeYogaSessionButtonClickedEvent(
-                                          clickedYogaSession:
-                                              successState.YogaSession[index]));
+                                          clickedYogaSessionId: successState
+                                              .YogaSession[index].id));
                                 },
                                 child: Text("Click Me"))
                           ],

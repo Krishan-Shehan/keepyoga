@@ -24,6 +24,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeYogaSessionButtonClickedEvent(
       HomeYogaSessionButtonClickedEvent event, Emitter<HomeState> emit) {
-    emit(HomeYogaSessionSelecttedState());
+    print("event.clickedYogaSessionId");
+    print(event.clickedYogaSessionId);
+    emit(HomeYogaSessionSelecttedState(
+        YogaSessionId: event.clickedYogaSessionId));
   }
 }

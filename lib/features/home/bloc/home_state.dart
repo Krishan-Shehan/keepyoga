@@ -16,4 +16,7 @@ class HomeYogaSessionsLoadedSuccessState extends HomeState {
   });
 }
 
-class HomeYogaSessionSelecttedState extends HomeState {}
+class HomeYogaSessionSelecttedState extends HomeActionState {
+  final String YogaSessionId;
+  HomeYogaSessionSelecttedState({required this.YogaSessionId});
+}

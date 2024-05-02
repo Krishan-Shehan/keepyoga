@@ -6,8 +6,8 @@ sealed class HomeEvent {}
 class HomeInitialFetchEvent extends HomeEvent {}
 
 class HomeYogaSessionButtonClickedEvent extends HomeEvent {
-  final YogaSessionData clickedYogaSession;
+  final String clickedYogaSessionId;
   HomeYogaSessionButtonClickedEvent({
-    required this.clickedYogaSession,
+    required this.clickedYogaSessionId,
   });
 }
