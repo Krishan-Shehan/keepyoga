@@ -242,6 +242,7 @@ class _HomeState extends State<Home> {
                     case HomeYogaSessionsLoadedSuccessState:
                       final successState =
                           state as HomeYogaSessionsLoadedSuccessState;
+
                       return ListView.builder(
                         itemCount: successState.YogaSession.length,
                         itemBuilder: (context, index) {
@@ -264,7 +265,7 @@ class _HomeState extends State<Home> {
                                     color: Colors.black.withOpacity(0.2),
                                     spreadRadius: 5,
                                     blurRadius: 7,
-                                    offset: Offset(
+                                    offset: const Offset(
                                         0, 3), // changes position of shadow
                                   ),
                                 ],
@@ -341,16 +342,8 @@ class _HomeState extends State<Home> {
                                               fontSize: 10.0),
                                         ),
                                       ),
-                                      // Text(
-                                      //   "By ${successState.YogaSession[index].instructor}",
-                                      //   maxLines: 1,
-                                      //   overflow: TextOverflow.fade,
-                                      //   softWrap: false,
-                                      // ),
                                     ],
                                   ),
-                                  // Text(successState
-                                  //     .YogaSession[index].instructor),
                                 ],
                               ),
                             ),
