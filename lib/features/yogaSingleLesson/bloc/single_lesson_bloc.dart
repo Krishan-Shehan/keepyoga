@@ -13,6 +13,7 @@ class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
     on<SingleLessonInitialFetchEvent>(singleLessonInitialFetchEvent);
     on<SingleLessonYogaBackButtonClickedEvent>(
         singleLessonYogaBackButtonClickedEvent);
+    on<PlayVidoEvent>(playVidoEvent);
   }
 
   FutureOr<void> singleLessonInitialFetchEvent(
@@ -30,5 +31,10 @@ class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
       Emitter<SingleLessonState> emit) {
     emit(SingleLessonYogaSelectedSession(
         YogaSessionId: event.clickedYogaSessionId));
+  }
+
+  FutureOr<void> playVidoEvent(
+      PlayVidoEvent event, Emitter<SingleLessonState> emit) {
+    emit(PlayVideoState());
   }
 }

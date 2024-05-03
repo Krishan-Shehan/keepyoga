@@ -20,3 +20,7 @@ class SingleLessonYogaSelectedSession extends SingleLessonActionState {
   final String YogaSessionId;
   SingleLessonYogaSelectedSession({required this.YogaSessionId});
 }
+
+class PlayVideoState extends SingleLessonActionState {}
+
+class PlayVideoStateTest extends SingleLessonState {}

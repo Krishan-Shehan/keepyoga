@@ -16,3 +16,5 @@ class SingleLessonYogaBackButtonClickedEvent extends SingleLessonEvent {
     required this.clickedYogaSessionId,
   });
 }
+
+class PlayVidoEvent extends SingleLessonEvent {}

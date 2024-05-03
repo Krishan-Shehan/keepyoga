@@ -17,6 +17,8 @@ class _SingleLessonState extends State<SingleLesson> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
+  String _icon = "play";
+
   @override
   void initState() {
     singleLessonBloc
@@ -32,20 +34,32 @@ class _SingleLessonState extends State<SingleLesson> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: BlocConsumer<SingleLessonBloc, SingleLessonState>(
         bloc: singleLessonBloc,
         listenWhen: (previous, current) => current is SingleLessonActionState,
+        buildWhen: (previous, current) => current is! SingleLessonActionState,
         listener: (BuildContext context, SingleLessonState state) {
           if (state is SingleLessonYogaSelectedSession) {
             final successState = state as SingleLessonYogaSelectedSession;
+            _controller.dispose();
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => YogaLessons(
                         yogaSessionId: successState.YogaSessionId)));
+          }
+          if (state is PlayVideoState) {
+            _controller.play();
+            _icon = "stop";
           }
         },
         builder: (BuildContext context, SingleLessonState state) {
@@ -146,11 +160,14 @@ class _SingleLessonState extends State<SingleLesson> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Text(
-                                    successState.YogaLesson[0].description,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.white,
+                                  child: SizedBox(
+                                    child: Text(
+                                      successState.YogaLesson[0].description,
+                                      maxLines: 4,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 13.0),
                                     ),
                                   ),
                                 ),
@@ -183,21 +200,22 @@ class _SingleLessonState extends State<SingleLesson> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                if (_controller.value.isPlaying) {
-                                  _controller.pause();
-                                } else {
-                                  // If the video is paused, play it.
-                                  _controller.play();
-                                }
+                                // if (_controller.value.isPlaying) {
+                                //   _controller.pause();
+                                // } else {
+                                //   // If the video is paused, play it.
+                                //   _controller.play();
+                                // }
+                                singleLessonBloc.add(PlayVidoEvent());
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: CircleBorder(),
                                 padding: EdgeInsets.all(24),
                               ),
                               child: Icon(
-                                _controller.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
+                                _icon == "play"
+                                    ? Icons.play_arrow
+                                    : Icons.pause,
                                 size: 32,
                               ),
                             ),
