@@ -33,4 +33,33 @@ class AuthRepo {
       return false;
     }
   }
+
+  static Future<bool> Register(
+      String email, String password, String username, String gender) async {
+    var client = http.Client();
+
+    try {
+      var response = await client.post(
+        Uri.parse('http://84.46.249.96:5000/api/v1/auth/register'),
+        body: {
+          "username": username,
+          "email": email,
+          "gender": gender, //male,female,other
+          "password": password
+        },
+      );
+
+      debugPrint(response.body);
+      // "User registered successfully"
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final responseData = jsonDecode(response.body);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 }

@@ -11,3 +11,5 @@ class HomeYogaSessionButtonClickedEvent extends HomeEvent {
     required this.clickedYogaSessionId,
   });
 }
+
+class HomeLogOutButtonClickedEvent extends HomeEvent {}

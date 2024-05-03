@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keepyoga/features/auth/ui/loginUi.dart';
+import 'package:keepyoga/features/launch/ui/launch.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
-      home: LoginUi(),
+      home: const LaunchUi(),
     );
   }
 }

@@ -20,3 +20,5 @@ class HomeYogaSessionSelecttedState extends HomeActionState {
   final String YogaSessionId;
   HomeYogaSessionSelecttedState({required this.YogaSessionId});
 }
+
+class HomeLogOutState extends HomeActionState {}

@@ -9,16 +9,9 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  // AuthRepo authRepo;
-
   AuthBloc() : super(AuthInitial()) {
-    on<AuthInitialEvent>(authInitialEvent);
     on<LoginButtonPressedEvent>(loginButtonPressedEvent);
-  }
-
-  FutureOr<void> authInitialEvent(
-      AuthInitialEvent event, Emitter<AuthState> emit) {
-    // emit(LoginInitialState());
+    on<RegistrationButtonPressedEvent>(registrationButtonPressedEvent);
   }
 
   FutureOr<void> loginButtonPressedEvent(
@@ -31,6 +24,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       print("LoginErrorState");
       emit(LoginErrorState());
+    }
+  }
+
+  FutureOr<void> registrationButtonPressedEvent(
+      RegistrationButtonPressedEvent event, Emitter<AuthState> emit) async {
+    emit(RegistrationLoadingState());
+    bool success = await AuthRepo.Register(
+        event.email, event.password, event.username, event.gender);
+    if (success) {
+      emit(RegistrationSuccessState());
+    } else {
+      emit(RegistrationErrorState());
     }
   }
 }

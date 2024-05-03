@@ -21,7 +21,7 @@ class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
     emit(SingleLessonYogaLoadingState());
     print("hhhh");
     List<YogaSessionLessonData> yogaLesson =
-        await YogaRepo.fetchYogaSingleLessonData(event.yogaLessonId, "token");
+        await YogaRepo.fetchYogaSingleLessonData(event.yogaLessonId);
     print(yogaLesson);
     emit(SingleLessonYogaLoadedSuccessState(YogaLesson: yogaLesson));
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keepyoga/features/auth/ui/loginUi.dart';
 import 'package:keepyoga/features/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keepyoga/features/yogaLesson/ui/allLessons.dart';
@@ -52,7 +53,7 @@ class _HomeState extends State<Home> {
                             shape: CircleBorder(), color: Colors.white),
                         child: IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            homeBloc.add(HomeLogOutButtonClickedEvent());
                           },
                           icon: const Icon(
                             Icons.power_settings_new,
@@ -231,6 +232,10 @@ class _HomeState extends State<Home> {
                         MaterialPageRoute(
                             builder: (context) => YogaLessons(
                                 yogaSessionId: successState.YogaSessionId)));
+                  }
+                  if (state is HomeLogOutState) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => LoginUi()));
                   }
                 },
                 builder: (BuildContext context, HomeState state) {

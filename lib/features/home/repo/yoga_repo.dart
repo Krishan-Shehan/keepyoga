@@ -6,6 +6,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:keepyoga/features/home/models/Yoga_Session_DataModel.dart';
 
@@ -13,13 +14,13 @@ class YogaRepo {
   static Future<List<YogaSessionData>> fetchYogaSessions() async {
     var client = http.Client();
     List<YogaSessionData> yogaSessions = [];
+    String token = await GetStorage().read("access_token");
     try {
       log("response.body");
       var response = await client.get(
         Uri.parse('http://84.46.249.96:5000/api/v1/sessions'),
         headers: {
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMmUwZTJkMy02ZWVlLTQzNTYtYmVjMC01Yjg5ZWY1NTRiYjQiLCJpYXQiOjE3MTQ2NDg0NDcsImV4cCI6MTcxNDczNDg0N30.BOS4ziXJNBLQrzAQWMjXQE0WVEx70l4BUpAvgdE850s', // Add your token here
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -56,13 +57,13 @@ class YogaRepo {
       String id) async {
     var client = http.Client();
     List<YogaSessionData> yogaSession = [];
+    String token = await GetStorage().read("access_token");
     try {
       log("response.body");
       var response = await client.get(
         Uri.parse('http://84.46.249.96:5000/api/v1/session?id=$id'),
         headers: {
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMmUwZTJkMy02ZWVlLTQzNTYtYmVjMC01Yjg5ZWY1NTRiYjQiLCJpYXQiOjE3MTQ2NDg0NDcsImV4cCI6MTcxNDczNDg0N30.BOS4ziXJNBLQrzAQWMjXQE0WVEx70l4BUpAvgdE850s', // Add your token here
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -96,16 +97,15 @@ class YogaRepo {
   }
 
   static Future<List<YogaSessionLessonData>> fetchYogaSingleLessonData(
-      String id, String token) async {
+      String id) async {
     var client = http.Client();
     List<YogaSessionLessonData> yogaLesson = [];
+    String token = await GetStorage().read("access_token");
     try {
       var response = await client.get(
         Uri.parse('http://84.46.249.96:5000/api/v1/lesson?id=$id'),
         headers: {
-          'Authorization':
-              // 'Bearer $token', // Add your token here
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMmUwZTJkMy02ZWVlLTQzNTYtYmVjMC01Yjg5ZWY1NTRiYjQiLCJpYXQiOjE3MTQ2NDg0NDcsImV4cCI6MTcxNDczNDg0N30.BOS4ziXJNBLQrzAQWMjXQE0WVEx70l4BUpAvgdE850s', // Add your token here
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -140,4 +140,3 @@ class YogaRepo {
     }
   }
 }
-// YogaSessionData
