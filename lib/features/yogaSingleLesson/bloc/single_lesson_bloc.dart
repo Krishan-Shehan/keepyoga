@@ -19,7 +19,6 @@ class SingleLessonBloc extends Bloc<SingleLessonEvent, SingleLessonState> {
       SingleLessonInitialFetchEvent event,
       Emitter<SingleLessonState> emit) async {
     emit(SingleLessonYogaLoadingState());
-    print("hhhh");
     List<YogaSessionLessonData> yogaLesson =
         await YogaRepo.fetchYogaSingleLessonData(event.yogaLessonId);
     print(yogaLesson);

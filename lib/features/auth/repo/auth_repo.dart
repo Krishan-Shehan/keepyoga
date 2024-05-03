@@ -16,7 +16,6 @@ class AuthRepo {
       debugPrint(response.body);
 
       // final test = jsonDecode(response.body);
-      // debugPrint("test");
       // debugPrint(test);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {

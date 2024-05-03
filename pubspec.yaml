@@ -38,6 +38,10 @@ dependencies:
   get_storage: ^2.1.1
   video_player: ^2.8.5
   jwt_decoder: ^2.0.1
+  bloc:
+  flutter_bloc:
+  equatable:
+  http:
 
 dev_dependencies:
   flutter_test:

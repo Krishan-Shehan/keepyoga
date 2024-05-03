@@ -18,11 +18,10 @@ class LessonBloc extends Bloc<LessonEvent, LessonState> {
   Future<FutureOr<void>> lessonInitialFetchEvent(
       LessonInitialFetchEvent event, Emitter<LessonState> emit) async {
     emit(LessonYogaLoadingState());
-    print("hhhh");
 
     List<YogaSessionData> yogaSession =
         await YogaRepo.fetchYogaSingleSessionData(event.yogaSessionId);
-    print(yogaSession);
+
     emit(LessonYogaLoadedSuccessState(YogaSession: yogaSession));
   }
 

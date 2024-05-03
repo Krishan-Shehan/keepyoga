@@ -23,3 +23,5 @@ class RegistrationSuccessState extends AuthState {}
 class LoginErrorState extends AuthState {}
 
 class RegistrationErrorState extends AuthState {}
+
+class AuthSuccessState extends AuthState {}
