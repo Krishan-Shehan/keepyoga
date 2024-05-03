@@ -22,3 +22,5 @@ class HomeYogaSessionSelecttedState extends HomeActionState {
 }
 
 class HomeLogOutState extends HomeActionState {}
+
+class HometokenExpiredState extends HomeActionState {}

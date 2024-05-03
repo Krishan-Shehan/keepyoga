@@ -237,6 +237,10 @@ class _HomeState extends State<Home> {
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => LoginUi()));
                   }
+                  if (state is HometokenExpiredState) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => LoginUi()));
+                  }
                 },
                 builder: (BuildContext context, HomeState state) {
                   switch (state.runtimeType) {

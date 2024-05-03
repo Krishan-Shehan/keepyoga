@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:keepyoga/features/home/models/Yoga_Session_DataModel.dart';
 import 'package:keepyoga/features/home/repo/yoga_repo.dart';
 import 'package:meta/meta.dart';
@@ -19,8 +20,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<FutureOr<void>> homeInitialFetchEvent(
       HomeInitialFetchEvent event, Emitter<HomeState> emit) async {
     emit(HomeYogaSessionsLoadingState());
-    List<YogaSessionData> yogaSessions = await YogaRepo.fetchYogaSessions();
-    emit(HomeYogaSessionsLoadedSuccessState(YogaSession: yogaSessions));
+    try {
+      String token = await GetStorage().read("access_token");
+      if (token != Null) {
+        bool isExpired = JwtDecoder.isExpired(token);
+        if (isExpired == true) {
+          emit(HometokenExpiredState());
+        } else {
+          List<YogaSessionData> yogaSessions =
+              await YogaRepo.fetchYogaSessions();
+          emit(HomeYogaSessionsLoadedSuccessState(YogaSession: yogaSessions));
+        }
+      } else {
+        emit(HometokenExpiredState());
+      }
+    } catch (e) {
+      emit(HometokenExpiredState());
+    }
   }
 
   FutureOr<void> homeYogaSessionButtonClickedEvent(
